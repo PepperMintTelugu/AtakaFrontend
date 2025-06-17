@@ -50,7 +50,7 @@ import { Book } from "@/types/book";
 export default function Admin() {
   const [isAddBookOpen, setIsAddBookOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [books, setBooks] = useState(mockBooks);
 
   // Sample stats data
