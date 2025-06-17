@@ -137,4 +137,33 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
   }
+
+  /* Mobile-specific improvements */
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+
+  /* Improve mobile scrolling */
+  @media (max-width: 768px) {
+    .book-card-hover:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .book-card-hover:active {
+      transform: scale(0.98);
+      transition: transform 0.1s ease;
+    }
+  }
+
+  /* Better mobile tap targets */
+  @media (max-width: 640px) {
+    button,
+    [role="button"],
+    input[type="submit"],
+    input[type="button"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
 }
