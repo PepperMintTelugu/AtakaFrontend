@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppProvider } from "@/contexts/AppContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import { Navigation } from "@/components/Navigation";
 import { Cart } from "@/components/Cart";
 import { Wishlist } from "@/components/Wishlist";
@@ -15,6 +16,7 @@ import BookDetails from "./pages/BookDetails";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Admin from "./pages/Admin";
+import AdminTheme from "./pages/AdminTheme";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,135 +24,138 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <AppProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <div className="flex flex-col min-h-screen">
-            <Navigation />
-            <Cart />
-            <Wishlist />
+      <ThemeProvider>
+        <AppProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <div className="flex flex-col min-h-screen">
+              <Navigation />
+              <Cart />
+              <Wishlist />
 
-            <main className="flex-1 pb-16 lg:pb-0">
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/shop" element={<Shop />} />
-                <Route path="/book/:id" element={<BookDetails />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/admin" element={<Admin />} />
+              <main className="flex-1 pb-16 lg:pb-0">
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/shop" element={<Shop />} />
+                  <Route path="/book/:id" element={<BookDetails />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/admin" element={<Admin />} />
+                  <Route path="/admin/theme" element={<AdminTheme />} />
 
-                {/* Placeholder routes for future implementation */}
-                <Route
-                  path="/login"
-                  element={
-                    <PlaceholderPage
-                      title="Login"
-                      description="Google One-tap signin coming soon"
-                    />
-                  }
-                />
-                <Route
-                  path="/register"
-                  element={
-                    <PlaceholderPage
-                      title="Register"
-                      description="Account creation coming soon"
-                    />
-                  }
-                />
-                <Route
-                  path="/checkout"
-                  element={
-                    <PlaceholderPage
-                      title="Checkout"
-                      description="Razorpay integration coming soon"
-                    />
-                  }
-                />
-                <Route
-                  path="/orders"
-                  element={
-                    <PlaceholderPage
-                      title="My Orders"
-                      description="Order history coming soon"
-                    />
-                  }
-                />
-                <Route
-                  path="/profile"
-                  element={
-                    <PlaceholderPage
-                      title="My Profile"
-                      description="User profile management coming soon"
-                    />
-                  }
-                />
-                <Route
-                  path="/shipping"
-                  element={
-                    <PlaceholderPage
-                      title="Shipping Info"
-                      description="Shipping information coming soon"
-                    />
-                  }
-                />
-                <Route
-                  path="/returns"
-                  element={
-                    <PlaceholderPage
-                      title="Returns"
-                      description="Returns policy coming soon"
-                    />
-                  }
-                />
-                <Route
-                  path="/faq"
-                  element={
-                    <PlaceholderPage
-                      title="FAQ"
-                      description="Frequently asked questions coming soon"
-                    />
-                  }
-                />
-                <Route
-                  path="/track-order"
-                  element={
-                    <PlaceholderPage
-                      title="Track Order"
-                      description="ShipRocket tracking coming soon"
-                    />
-                  }
-                />
-                <Route
-                  path="/privacy"
-                  element={
-                    <PlaceholderPage
-                      title="Privacy Policy"
-                      description="Privacy policy coming soon"
-                    />
-                  }
-                />
-                <Route
-                  path="/terms"
-                  element={
-                    <PlaceholderPage
-                      title="Terms of Service"
-                      description="Terms and conditions coming soon"
-                    />
-                  }
-                />
+                  {/* Placeholder routes for future implementation */}
+                  <Route
+                    path="/login"
+                    element={
+                      <PlaceholderPage
+                        title="Login"
+                        description="Google One-tap signin coming soon"
+                      />
+                    }
+                  />
+                  <Route
+                    path="/register"
+                    element={
+                      <PlaceholderPage
+                        title="Register"
+                        description="Account creation coming soon"
+                      />
+                    }
+                  />
+                  <Route
+                    path="/checkout"
+                    element={
+                      <PlaceholderPage
+                        title="Checkout"
+                        description="Razorpay integration coming soon"
+                      />
+                    }
+                  />
+                  <Route
+                    path="/orders"
+                    element={
+                      <PlaceholderPage
+                        title="My Orders"
+                        description="Order history coming soon"
+                      />
+                    }
+                  />
+                  <Route
+                    path="/profile"
+                    element={
+                      <PlaceholderPage
+                        title="My Profile"
+                        description="User profile management coming soon"
+                      />
+                    }
+                  />
+                  <Route
+                    path="/shipping"
+                    element={
+                      <PlaceholderPage
+                        title="Shipping Info"
+                        description="Shipping information coming soon"
+                      />
+                    }
+                  />
+                  <Route
+                    path="/returns"
+                    element={
+                      <PlaceholderPage
+                        title="Returns"
+                        description="Returns policy coming soon"
+                      />
+                    }
+                  />
+                  <Route
+                    path="/faq"
+                    element={
+                      <PlaceholderPage
+                        title="FAQ"
+                        description="Frequently asked questions coming soon"
+                      />
+                    }
+                  />
+                  <Route
+                    path="/track-order"
+                    element={
+                      <PlaceholderPage
+                        title="Track Order"
+                        description="ShipRocket tracking coming soon"
+                      />
+                    }
+                  />
+                  <Route
+                    path="/privacy"
+                    element={
+                      <PlaceholderPage
+                        title="Privacy Policy"
+                        description="Privacy policy coming soon"
+                      />
+                    }
+                  />
+                  <Route
+                    path="/terms"
+                    element={
+                      <PlaceholderPage
+                        title="Terms of Service"
+                        description="Terms and conditions coming soon"
+                      />
+                    }
+                  />
 
-                {/* Catch-all route */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
+                  {/* Catch-all route */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </main>
 
-            <Footer />
-            <MobileBottomNav />
-          </div>
-        </BrowserRouter>
-      </AppProvider>
+              <Footer />
+              <MobileBottomNav />
+            </div>
+          </BrowserRouter>
+        </AppProvider>
+      </ThemeProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
