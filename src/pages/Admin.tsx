@@ -104,6 +104,12 @@ export default function Admin() {
               </h1>
             </div>
             <div className="flex items-center space-x-4">
+              <Button variant="outline" asChild>
+                <Link to="/admin/theme">
+                  <Settings className="w-4 h-4 mr-2" />
+                  Theme Settings
+                </Link>
+              </Button>
               <span className="text-sm text-gray-600">Welcome, Admin</span>
               <Button variant="outline" asChild>
                 <Link to="/login">Logout</Link>
@@ -187,6 +193,75 @@ export default function Admin() {
                   <p className="text-xs text-muted-foreground">
                     +20.1% from last month
                   </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Integration Status */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">
+                        Payments
+                      </p>
+                      <p className="text-xs text-green-600">
+                        Razorpay Connected
+                      </p>
+                    </div>
+                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                      <CreditCard className="w-4 h-4 text-green-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">
+                        Shipping
+                      </p>
+                      <p className="text-xs text-green-600">ShipRocket Ready</p>
+                    </div>
+                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                      <Truck className="w-4 h-4 text-green-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">
+                        Authentication
+                      </p>
+                      <p className="text-xs text-green-600">
+                        Google OAuth Active
+                      </p>
+                    </div>
+                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                      <Shield className="w-4 h-4 text-green-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Theme</p>
+                      <p className="text-xs text-blue-600">Customizable</p>
+                    </div>
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <Settings className="w-4 h-4 text-blue-600" />
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </div>
