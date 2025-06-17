@@ -358,7 +358,7 @@ export default function Shop() {
             </p>
           </div>
 
-          <div className="flex items-center space-x-4 mt-4 lg:mt-0">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mt-4 lg:mt-0">
             {/* Sort */}
             <Select
               value={filters.sortBy}
@@ -366,7 +366,7 @@ export default function Shop() {
                 handleFilterChange("sortBy", value as FilterOptions["sortBy"])
               }
             >
-              <SelectTrigger className="w-48">
+              <SelectTrigger className="w-full sm:w-48 h-10">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -378,48 +378,50 @@ export default function Shop() {
               </SelectContent>
             </Select>
 
-            {/* View Mode */}
-            <div className="flex items-center border rounded-lg">
-              <Button
-                variant={viewMode === "grid" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setViewMode("grid")}
-                className="rounded-r-none"
-              >
-                <Grid className="w-4 h-4" />
-              </Button>
-              <Button
-                variant={viewMode === "list" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setViewMode("list")}
-                className="rounded-l-none"
-              >
-                <List className="w-4 h-4" />
-              </Button>
-            </div>
-
-            {/* Mobile Filters */}
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" className="lg:hidden">
-                  <SlidersHorizontal className="w-4 h-4 mr-2" />
-                  Filters
-                  {activeFiltersCount > 0 && (
-                    <Badge variant="destructive" className="ml-2">
-                      {activeFiltersCount}
-                    </Badge>
-                  )}
+            <div className="flex items-center gap-3">
+              {/* View Mode */}
+              <div className="hidden sm:flex items-center border rounded-lg">
+                <Button
+                  variant={viewMode === "grid" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("grid")}
+                  className="rounded-r-none"
+                >
+                  <Grid className="w-4 h-4" />
                 </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-80">
-                <SheetHeader>
-                  <SheetTitle>Filters</SheetTitle>
-                </SheetHeader>
-                <div className="mt-6">
-                  <FilterContent />
-                </div>
-              </SheetContent>
-            </Sheet>
+                <Button
+                  variant={viewMode === "list" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("list")}
+                  className="rounded-l-none"
+                >
+                  <List className="w-4 h-4" />
+                </Button>
+              </div>
+
+              {/* Mobile Filters */}
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="outline" className="lg:hidden h-10 px-4">
+                    <SlidersHorizontal className="w-4 h-4 mr-2" />
+                    Filters
+                    {activeFiltersCount > 0 && (
+                      <Badge variant="destructive" className="ml-2 h-5 min-w-5">
+                        {activeFiltersCount}
+                      </Badge>
+                    )}
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="w-full sm:w-80 p-0">
+                  <SheetHeader className="p-6 pb-4">
+                    <SheetTitle className="text-lg">Filters</SheetTitle>
+                  </SheetHeader>
+                  <div className="px-6 pb-6 overflow-y-auto h-full">
+                    <FilterContent />
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
         </div>
 
@@ -454,7 +456,7 @@ export default function Shop() {
               <div
                 className={
                   viewMode === "grid"
-                    ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                    ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4"
                     : "space-y-4"
                 }
               >
