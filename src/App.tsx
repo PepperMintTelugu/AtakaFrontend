@@ -15,6 +15,8 @@ import BookDetails from "./pages/BookDetails";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Admin from "./pages/Admin";
+import { MobileCartPage } from "./pages/MobileCartPage";
+import { MobileWishlistPage } from "./pages/MobileWishlistPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
