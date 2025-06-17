@@ -8,6 +8,7 @@ import { Navigation } from "@/components/Navigation";
 import { Cart } from "@/components/Cart";
 import { Wishlist } from "@/components/Wishlist";
 import { Footer } from "@/components/Footer";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
 import Index from "./pages/Index";
 import Shop from "./pages/Shop";
 import BookDetails from "./pages/BookDetails";
@@ -30,7 +31,7 @@ const App = () => (
             <Cart />
             <Wishlist />
 
-            <main className="flex-1">
+            <main className="flex-1 pb-16 lg:pb-0">
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/shop" element={<Shop />} />
@@ -38,6 +39,10 @@ const App = () => (
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/admin" element={<Admin />} />
+
+                {/* Mobile-specific routes */}
+                <Route path="/wishlist" element={<MobileWishlistPage />} />
+                <Route path="/cart" element={<MobileCartPage />} />
 
                 {/* Placeholder routes for future implementation */}
                 <Route
@@ -146,6 +151,7 @@ const App = () => (
             </main>
 
             <Footer />
+            <MobileBottomNav />
           </div>
         </BrowserRouter>
       </AppProvider>
