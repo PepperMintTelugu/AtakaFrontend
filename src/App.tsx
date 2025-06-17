@@ -13,6 +13,7 @@ import Shop from "./pages/Shop";
 import BookDetails from "./pages/BookDetails";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
                 <Route path="/book/:id" element={<BookDetails />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/admin" element={<Admin />} />
 
                 {/* Placeholder routes for future implementation */}
                 <Route
