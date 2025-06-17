@@ -48,11 +48,11 @@ export default function Index() {
               Discover the rich heritage of Telugu literature with our curated
               collection of books
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md sm:max-w-none mx-auto">
               <Button
                 asChild
                 size="lg"
-                className="bg-white text-brand-600 hover:bg-gray-100 font-semibold"
+                className="bg-white text-brand-600 hover:bg-gray-100 font-semibold h-12 touch-manipulation"
               >
                 <Link to="/shop">Explore All Books</Link>
               </Button>
@@ -60,7 +60,7 @@ export default function Index() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="border-white text-white hover:bg-white hover:text-brand-600"
+                className="border-white text-white hover:bg-white hover:text-brand-600 h-12 touch-manipulation"
               >
                 <Link to="/shop?category=literature">Classic Literature</Link>
               </Button>
@@ -112,22 +112,22 @@ export default function Index() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
             {categories.map((category) => (
               <Link
                 key={category.id}
                 to={`/shop?category=${category.id}`}
-                className="group"
+                className="group touch-manipulation"
               >
-                <Card className="book-card-hover text-center h-full">
-                  <CardContent className="p-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-brand-100 to-telugu-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:from-brand-200 group-hover:to-telugu-200 transition-colors">
-                      <BookOpen className="w-8 h-8 text-brand-600" />
+                <Card className="book-card-hover text-center h-full active:scale-95 transition-transform">
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-brand-100 to-telugu-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:from-brand-200 group-hover:to-telugu-200 transition-colors">
+                      <BookOpen className="w-6 h-6 sm:w-8 sm:h-8 text-brand-600" />
                     </div>
-                    <h3 className="font-semibold text-sm mb-1">
+                    <h3 className="font-semibold text-xs sm:text-sm mb-1">
                       {category.name}
                     </h3>
-                    <p className="text-xs text-gray-600 telugu-text">
+                    <p className="text-xs text-gray-600 telugu-text hidden sm:block">
                       {category.nameTelugu}
                     </p>
                   </CardContent>
@@ -190,7 +190,7 @@ export default function Index() {
               </Button>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
               {bestsellers.slice(0, 5).map((book) => (
                 <BookCard key={book.id} book={book} />
               ))}
@@ -219,7 +219,7 @@ export default function Index() {
               </Button>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
               {newArrivals.slice(0, 5).map((book) => (
                 <BookCard key={book.id} book={book} />
               ))}
