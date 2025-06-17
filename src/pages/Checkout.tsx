@@ -741,20 +741,20 @@ export default function Checkout() {
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-3 pt-4 border-t">
-                    <Button
-                      variant="outline"
-                      onClick={saveCurrentAddress}
-                      disabled={!address.fullName || !address.phone}
-                    >
-                      <Save className="w-4 h-4 mr-2" />
-                      Save Address
-                    </Button>
-                    <p className="text-sm text-gray-500">
-                      Save for faster checkout next time
-                    </p>
-                  </div>
-                  }
+                    <div className="flex items-center space-x-3 pt-4 border-t">
+                      <Button
+                        variant="outline"
+                        onClick={saveCurrentAddress}
+                        disabled={!address.fullName || !address.phone}
+                      >
+                        <Save className="w-4 h-4 mr-2" />
+                        Save Address
+                      </Button>
+                      <p className="text-sm text-gray-500">
+                        Save for faster checkout next time
+                      </p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             )}
