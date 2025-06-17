@@ -25,7 +25,6 @@ import { categories } from "@/data/books";
 export function Navigation() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const navigate = useNavigate();
   const { itemCount, toggleCart } = useCart();
   const { wishlist, toggleWishlist } = useWishlist();
@@ -35,7 +34,7 @@ export function Navigation() {
     if (searchQuery.trim()) {
       navigate(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery("");
-      setIsMobileSearchOpen(false);
+      setIsMobileMenuOpen(false);
     }
   };
 
@@ -140,6 +139,66 @@ export function Navigation() {
             </form>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="border-t bg-white shadow-lg">
+            <nav className="py-2">
+              <Link
+                to="/shop"
+                className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 active:bg-gray-100 border-b border-gray-100"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <BookOpen className="w-5 h-5 mr-3 text-brand-500" />
+                All Books
+              </Link>
+              {categories.slice(0, 6).map((category) => (
+                <Link
+                  key={category.id}
+                  to={`/shop?category=${category.id}`}
+                  className="flex justify-between items-center px-4 py-3 text-gray-700 hover:bg-gray-50 active:bg-gray-100 border-b border-gray-100"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <span className="font-medium">{category.name}</span>
+                  <span className="text-xs text-gray-500 telugu-text">
+                    {category.nameTelugu}
+                  </span>
+                </Link>
+              ))}
+              <div className="border-t border-gray-200">
+                <Link
+                  to="/login"
+                  className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 active:bg-gray-100"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <User className="w-5 h-5 mr-3 text-brand-500" />
+                  Sign In
+                </Link>
+                <Link
+                  to="/orders"
+                  className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 active:bg-gray-100"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  My Orders
+                </Link>
+                <Link
+                  to="/about"
+                  className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 active:bg-gray-100"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  About Us
+                </Link>
+                <Link
+                  to="/contact"
+                  className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 active:bg-gray-100"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Contact
+                </Link>
+              </div>
+            </nav>
+          </div>
+        )}
       </div>
 
       {/* Desktop Header */}
@@ -162,10 +221,7 @@ export function Navigation() {
             </Link>
 
             {/* Search Bar - Desktop */}
-            <form
-              onSubmit={handleSearch}
-              className="flex flex-1 max-w-md mx-8"
-            >
+            <form onSubmit={handleSearch} className="flex flex-1 max-w-md mx-8">
               <div className="relative w-full">
                 <Input
                   type="text"
@@ -189,9 +245,7 @@ export function Navigation() {
               {/* Categories Dropdown - Desktop */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost">
-                    Categories
-                  </Button>
+                  <Button variant="ghost">Categories</Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   {categories.map((category) => (
@@ -267,106 +321,48 @@ export function Navigation() {
                   <DropdownMenuItem asChild>
                     <Link to="/profile">My Profile</Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/admin">Admin Dashboard</Link>
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
           </div>
         </div>
-      </div>
 
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="lg:hidden border-t bg-white shadow-lg">
-            <nav className="py-2">
+        {/* Desktop Navigation Links */}
+        <div className="border-t bg-gray-50">
+          <div className="container mx-auto px-4">
+            <nav className="flex items-center space-x-8 h-12 text-sm">
               <Link
                 to="/shop"
-                className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 active:bg-gray-100 border-b border-gray-100"
-                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-gray-700 hover:text-brand-500 transition-colors"
               >
-                <BookOpen className="w-5 h-5 mr-3 text-brand-500" />
                 All Books
               </Link>
               {categories.slice(0, 6).map((category) => (
                 <Link
                   key={category.id}
                   to={`/shop?category=${category.id}`}
-                  className="flex justify-between items-center px-4 py-3 text-gray-700 hover:bg-gray-50 active:bg-gray-100 border-b border-gray-100"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-gray-700 hover:text-brand-500 transition-colors"
                 >
-                  <span className="font-medium">{category.name}</span>
-                  <span className="text-xs text-gray-500 telugu-text">
-                    {category.nameTelugu}
-                  </span>
+                  {category.name}
                 </Link>
               ))}
-              <div className="border-t border-gray-200">
-                <Link
-                  to="/login"
-                  className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 active:bg-gray-100"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <User className="w-5 h-5 mr-3 text-brand-500" />
-                  Sign In
-                </Link>
-                <Link
-                  to="/orders"
-                  className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 active:bg-gray-100"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  My Orders
-                </Link>
-                <Link
-                  to="/about"
-                  className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 active:bg-gray-100"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  About Us
-                </Link>
-                <Link
-                  to="/contact"
-                  className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 active:bg-gray-100"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Contact
-                </Link>
-              </div>
-            </nav>
-          </div>
-        )}
-      </div>
-
-      {/* Desktop Navigation Links */}
-      <div className="hidden lg:block border-t bg-gray-50">
-        <div className="container mx-auto px-4">
-          <nav className="flex items-center space-x-8 h-12 text-sm">
-            <Link
-              to="/shop"
-              className="text-gray-700 hover:text-brand-500 transition-colors"
-            >
-              All Books
-            </Link>
-            {categories.slice(0, 6).map((category) => (
               <Link
-                key={category.id}
-                to={`/shop?category=${category.id}`}
+                to="/about"
+                className="text-gray-700 hover:text-brand-500 transition-colors ml-auto"
+              >
+                About
+              </Link>
+              <Link
+                to="/contact"
                 className="text-gray-700 hover:text-brand-500 transition-colors"
               >
-                {category.name}
+                Contact
               </Link>
-            ))}
-            <Link
-              to="/about"
-              className="text-gray-700 hover:text-brand-500 transition-colors ml-auto"
-            >
-              About
-            </Link>
-            <Link
-              to="/contact"
-              className="text-gray-700 hover:text-brand-500 transition-colors"
-            >
-              Contact
-            </Link>
-          </nav>
+            </nav>
+          </div>
         </div>
       </div>
     </header>
