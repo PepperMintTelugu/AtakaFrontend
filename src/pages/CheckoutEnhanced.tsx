@@ -58,7 +58,12 @@ interface Address {
 }
 
 export default function CheckoutEnhanced() {
-  const { items, itemCount, totalAmount, clearCart } = useCart();
+  const {
+    cart: items,
+    itemCount,
+    cartTotal: totalAmount,
+    clearCart,
+  } = useCart();
   const { settings } = useTheme();
   const { toast } = useToast();
   const navigate = useNavigate();
