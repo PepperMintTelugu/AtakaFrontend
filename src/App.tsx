@@ -20,6 +20,7 @@ import AdminTheme from "./pages/AdminTheme";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Checkout from "./pages/Checkout";
+import ProductImport from "./pages/ProductImport";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -46,6 +47,7 @@ const App = () => (
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/admin" element={<Admin />} />
                   <Route path="/admin/theme" element={<AdminTheme />} />
+                  <Route path="/admin/import" element={<ProductImport />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
                   <Route path="/checkout" element={<Checkout />} />

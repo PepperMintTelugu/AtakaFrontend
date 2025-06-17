@@ -105,6 +105,12 @@ export default function Admin() {
             </div>
             <div className="flex items-center space-x-4">
               <Button variant="outline" asChild>
+                <Link to="/admin/import">
+                  <Upload className="w-4 h-4 mr-2" />
+                  Import Products
+                </Link>
+              </Button>
+              <Button variant="outline" asChild>
                 <Link to="/admin/theme">
                   <Settings className="w-4 h-4 mr-2" />
                   Theme Settings

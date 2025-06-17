@@ -16,7 +16,8 @@ import bookRoutes from "./routes/books.js";
 import orderRoutes from "./routes/orders.js";
 import userRoutes from "./routes/users.js";
 import adminRoutes from "./routes/admin.js";
-import paymentRoutes from "./routes/payments.js";
+import settingsRoutes from "./routes/settings.js";
+import importRoutes from "./routes/import.js";
 import settingsRoutes from "./routes/settings.js";
 
 // Import middleware
@@ -74,7 +75,8 @@ app.use("/api/books", bookRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
-app.use("/api/payments", paymentRoutes);
+app.use("/api/settings", settingsRoutes);
+app.use("/api/import", importRoutes);
 app.use("/api/settings", settingsRoutes);
 
 // Serve uploaded files
