@@ -22,10 +22,9 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookCard } from "@/components/BookCard";
+import PincodeChecker from "@/components/PincodeChecker";
 import { useCart, useWishlist } from "@/contexts/AppContext";
 import { getBookById, mockBooks } from "@/data/books";
 import { cn } from "@/lib/utils";
