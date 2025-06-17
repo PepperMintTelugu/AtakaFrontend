@@ -28,7 +28,17 @@ import {
   Home,
   CheckCircle,
   Lock,
+  Target,
+  Loader2,
+  Save,
+  Plus,
 } from "lucide-react";
+import {
+  getCurrentLocation,
+  reverseGeocode,
+  getAddressFromPincode,
+  isValidPincode,
+} from "@/utils/location";
 
 declare global {
   interface Window {
@@ -56,6 +66,10 @@ export default function Checkout() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
+  const [isGettingLocation, setIsGettingLocation] = useState(false);
+  const [savedAddresses, setSavedAddresses] = useState<Address[]>([]);
+  const [selectedAddressIndex, setSelectedAddressIndex] = useState<number>(-1);
+  const [isAddingNewAddress, setIsAddingNewAddress] = useState(true);
 
   const [address, setAddress] = useState<Address>({
     fullName: "",
@@ -96,15 +110,77 @@ export default function Checkout() {
     };
   }, []);
 
-  // Redirect if cart is empty
+  // Load saved addresses and redirect if cart is empty
   useEffect(() => {
     if (itemCount === 0) {
       navigate("/shop");
+      return;
+    }
+
+    // Load saved addresses from localStorage
+    const saved = localStorage.getItem("savedAddresses");
+    if (saved) {
+      try {
+        const addresses = JSON.parse(saved);
+        setSavedAddresses(addresses);
+
+        // Pre-select the first address if available
+        if (addresses.length > 0) {
+          setSelectedAddressIndex(0);
+          setAddress(addresses[0]);
+          setIsAddingNewAddress(false);
+        }
+      } catch (error) {
+        console.error("Failed to load saved addresses:", error);
+      }
     }
   }, [itemCount, navigate]);
 
   const handleAddressChange = (field: keyof Address, value: string) => {
     setAddress((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const saveCurrentAddress = () => {
+    if (!validateAddress()) return;
+
+    const updatedAddresses = [...savedAddresses];
+
+    if (selectedAddressIndex >= 0) {
+      // Update existing address
+      updatedAddresses[selectedAddressIndex] = address;
+    } else {
+      // Add new address
+      updatedAddresses.push(address);
+    }
+
+    setSavedAddresses(updatedAddresses);
+    localStorage.setItem("savedAddresses", JSON.stringify(updatedAddresses));
+
+    toast({
+      title: "Address Saved",
+      description: "Your address has been saved for future orders.",
+    });
+  };
+
+  const selectSavedAddress = (index: number) => {
+    setSelectedAddressIndex(index);
+    setAddress(savedAddresses[index]);
+    setIsAddingNewAddress(false);
+  };
+
+  const addNewAddress = () => {
+    setSelectedAddressIndex(-1);
+    setAddress({
+      fullName: "",
+      phone: "",
+      email: "",
+      street: "",
+      city: "",
+      state: "",
+      pincode: "",
+      landmark: "",
+    });
+    setIsAddingNewAddress(true);
   };
 
   const validateAddress = () => {
@@ -161,6 +237,53 @@ export default function Checkout() {
     }
 
     return true;
+  };
+
+  const getCurrentLocationAddress = async () => {
+    setIsGettingLocation(true);
+    try {
+      const coords = await getCurrentLocation();
+      const locationAddress = await reverseGeocode(coords);
+
+      setAddress((prev) => ({
+        ...prev,
+        street: locationAddress.street || prev.street,
+        city: locationAddress.city || prev.city,
+        state: locationAddress.state || prev.state,
+        pincode: locationAddress.pincode || prev.pincode,
+      }));
+
+      toast({
+        title: "Location Found! 📍",
+        description: `Using your current location: ${locationAddress.city}, ${locationAddress.state}`,
+      });
+    } catch (error: any) {
+      console.error("Location detection failed:", error);
+      toast({
+        title: "Location Access Failed",
+        description: error.message || "Please fill address manually",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGettingLocation(false);
+    }
+  };
+
+  const handlePincodeChange = async (value: string) => {
+    handleAddressChange("pincode", value);
+
+    if (isValidPincode(value)) {
+      try {
+        const addressDetails = await getAddressFromPincode(value);
+        setAddress((prev) => ({
+          ...prev,
+          city: addressDetails.city || prev.city,
+          state: addressDetails.state || prev.state,
+        }));
+      } catch (error) {
+        console.error("Pincode lookup failed:", error);
+      }
+    }
   };
 
   const processRazorpayPayment = async () => {
@@ -233,6 +356,26 @@ export default function Checkout() {
                 title: "Payment Successful! 🎉",
                 description: "Your order has been placed successfully.",
               });
+
+              // Save address for future use
+              if (address.fullName && address.phone) {
+                const currentAddresses = JSON.parse(
+                  localStorage.getItem("savedAddresses") || "[]"
+                );
+                const addressExists = currentAddresses.some(
+                  (addr: Address) =>
+                    addr.street === address.street &&
+                    addr.pincode === address.pincode
+                );
+
+                if (!addressExists) {
+                  currentAddresses.push(address);
+                  localStorage.setItem(
+                    "savedAddresses",
+                    JSON.stringify(currentAddresses)
+                  );
+                }
+              }
 
               // Clear cart
               clearCart();
@@ -362,12 +505,83 @@ export default function Checkout() {
             {currentStep === 1 && (
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <MapPin className="w-5 h-5 mr-2" />
-                    Shipping Address
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <MapPin className="w-5 h-5 mr-2" />
+                      Shipping Address
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={getCurrentLocationAddress}
+                        disabled={isGettingLocation}
+                      >
+                        {isGettingLocation ? (
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        ) : (
+                          <Target className="w-4 h-4 mr-2" />
+                        )}
+                        Use GPS
+                      </Button>
+                      {!isAddingNewAddress && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={addNewAddress}
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          New Address
+                        </Button>
+                      )}
+                    </div>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  {/* Saved Addresses */}
+                  {savedAddresses.length > 0 && (
+                    <div className="space-y-3">
+                      <Label>Saved Addresses</Label>
+                      <div className="grid grid-cols-1 gap-3">
+                        {savedAddresses.map((savedAddr, index) => (
+                          <div
+                            key={index}
+                            className={`border rounded-lg p-3 cursor-pointer transition-colors ${
+                              selectedAddressIndex === index
+                                ? "border-blue-500 bg-blue-50"
+                                : "border-gray-200 hover:border-gray-300"
+                            }`}
+                            onClick={() => selectSavedAddress(index)}
+                          >
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <p className="font-medium">{savedAddr.fullName}</p>
+                                <p className="text-sm text-gray-600">
+                                  {savedAddr.street}
+                                </p>
+                                <p className="text-sm text-gray-600">
+                                  {savedAddr.city}, {savedAddr.state} - {savedAddr.pincode}
+                                </p>
+                                <p className="text-sm text-gray-500">
+                                  {savedAddr.phone}
+                                </p>
+                              </div>
+                              <div className="w-4 h-4 rounded-full border-2 border-blue-500 flex items-center justify-center">
+                                {selectedAddressIndex === index && (
+                                  <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      {!isAddingNewAddress && <div className="border-t pt-4"></div>}
+                    </div>
+                  )}
+
+                  {/* Address Form */}
+                  {isAddingNewAddress && (
+                    <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="fullName">Full Name *</Label>
@@ -520,14 +734,27 @@ export default function Checkout() {
                       <Input
                         id="pincode"
                         value={address.pincode}
-                        onChange={(e) =>
-                          handleAddressChange("pincode", e.target.value)
-                        }
+                        onChange={(e) => handlePincodeChange(e.target.value)}
                         placeholder="6-digit pincode"
                         maxLength={6}
                       />
                     </div>
                   </div>
+
+                  <div className="flex items-center space-x-3 pt-4 border-t">
+                    <Button
+                      variant="outline"
+                      onClick={saveCurrentAddress}
+                      disabled={!address.fullName || !address.phone}
+                    >
+                      <Save className="w-4 h-4 mr-2" />
+                      Save Address
+                    </Button>
+                    <p className="text-sm text-gray-500">
+                      Save for faster checkout next time
+                    </p>
+                  </div>
+                  )}
                 </CardContent>
               </Card>
             )}
