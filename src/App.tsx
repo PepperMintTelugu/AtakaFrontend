@@ -19,7 +19,7 @@ import Admin from "./pages/Admin";
 import AdminTheme from "./pages/AdminTheme";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Checkout from "./pages/Checkout";
+import CheckoutEnhanced from "./pages/CheckoutEnhanced";
 import OrderSuccess from "./pages/OrderSuccess";
 import ProductImport from "./pages/ProductImport";
 import NotFound from "./pages/NotFound";
@@ -51,7 +51,7 @@ const App = () => (
                   <Route path="/admin/import" element={<ProductImport />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
-                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/checkout" element={<CheckoutEnhanced />} />
                   <Route
                     path="/order-success/:orderId"
                     element={<OrderSuccess />}
