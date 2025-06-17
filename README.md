@@ -465,4 +465,4 @@ For support and questions:
 
 **Built with ❤️ for Telugu literature enthusiasts**
 
-Made by [Your Name] | [Website](https://store.ataka.co.in)
+Made by [Kataari] | [Website](https://store.ataka.co.in)
