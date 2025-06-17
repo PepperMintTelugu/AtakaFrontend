@@ -193,6 +193,25 @@ const bookSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+
+    // Import tracking
+    woocommerceId: {
+      type: Number,
+      unique: true,
+      sparse: true,
+    },
+    importSource: {
+      type: String,
+      enum: ["manual", "woocommerce", "csv", "api"],
+      default: "manual",
+    },
+    importDate: Date,
+    woocommerceData: {
+      originalId: Number,
+      permalink: String,
+      type: String,
+      status: String,
+    },
   },
   {
     timestamps: true,
