@@ -15,8 +15,6 @@ import BookDetails from "./pages/BookDetails";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Admin from "./pages/Admin";
-import { MobileCartPage } from "./pages/MobileCartPage";
-import { MobileWishlistPage } from "./pages/MobileWishlistPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,10 +39,6 @@ const App = () => (
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/admin" element={<Admin />} />
-
-                {/* Mobile-specific routes */}
-                <Route path="/wishlist" element={<MobileWishlistPage />} />
-                <Route path="/cart" element={<MobileCartPage />} />
 
                 {/* Placeholder routes for future implementation */}
                 <Route
