@@ -754,7 +754,7 @@ export default function Checkout() {
                       Save for faster checkout next time
                     </p>
                   </div>
-                  )}
+                  }
                 </CardContent>
               </Card>
             )}
