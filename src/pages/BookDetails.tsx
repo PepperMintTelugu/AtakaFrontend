@@ -365,6 +365,12 @@ export default function BookDetails() {
                   <p className="text-xs text-gray-600">7 days return</p>
                 </div>
               </div>
+
+              {/* Delivery Checker */}
+              <PincodeChecker
+                productPrice={book.price}
+                className="bg-blue-50 border-blue-200"
+              />
             </div>
           </div>
 
