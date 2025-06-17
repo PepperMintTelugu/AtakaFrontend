@@ -16,7 +16,7 @@ import { Separator } from "@/components/ui/separator";
 
 export function Footer() {
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-gray-900 text-white mb-16 lg:mb-0">
       {/* Newsletter Section */}
       <div className="bg-gradient-to-r from-brand-600 to-telugu-600 py-12">
         <div className="container mx-auto px-4">
