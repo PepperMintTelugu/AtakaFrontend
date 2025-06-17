@@ -282,12 +282,12 @@ export function BookCard({
             )}
           </div>
 
-          {/* Wishlist button */}
+          {/* Wishlist button - Always visible on mobile */}
           <Button
             variant="ghost"
             size="sm"
             onClick={handleToggleWishlist}
-            className="absolute top-2 right-2 p-1.5 bg-white/90 backdrop-blur-sm hover:bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            className="absolute top-2 right-2 p-2 bg-white/90 backdrop-blur-sm hover:bg-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 touch-manipulation"
           >
             <Heart
               className={cn(
@@ -346,7 +346,7 @@ export function BookCard({
           <Button
             size="sm"
             onClick={handleAddToCart}
-            className="w-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            className="w-full opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 touch-manipulation h-9"
           >
             <ShoppingCart className="w-4 h-4 mr-1" />
             Add to Cart
