@@ -56,10 +56,10 @@ export function Navigation() {
               <BookOpen className="w-6 h-6 text-white" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-bold text-gray-900">
+              <span className="text-lg sm:text-xl font-bold text-gray-900">
                 TeluguBooks
               </span>
-              <span className="text-xs text-gray-500 telugu-text">
+              <span className="text-xs text-gray-500 telugu-text hidden sm:block">
                 తెలుగు పుస్తకాలు
               </span>
             </div>
@@ -68,7 +68,7 @@ export function Navigation() {
           {/* Search Bar - Desktop */}
           <form
             onSubmit={handleSearch}
-            className="hidden md:flex flex-1 max-w-md mx-8"
+            className="hidden lg:flex flex-1 max-w-md mx-8"
           >
             <div className="relative w-full">
               <Input
@@ -87,6 +87,16 @@ export function Navigation() {
               </Button>
             </div>
           </form>
+
+          {/* Mobile Search Button */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="lg:hidden"
+            onClick={() => navigate("/shop")}
+          >
+            <Search className="w-5 h-5" />
+          </Button>
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-4">
@@ -178,33 +188,33 @@ export function Navigation() {
             <Button
               variant="ghost"
               size="sm"
-              className="md:hidden"
+              className="lg:hidden p-2"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? (
-                <X className="w-5 h-5" />
+                <X className="w-6 h-6" />
               ) : (
-                <Menu className="w-5 h-5" />
+                <Menu className="w-6 h-6" />
               )}
             </Button>
           </div>
         </div>
 
-        {/* Mobile Search Bar */}
-        <div className="md:hidden pb-4">
+        {/* Mobile Search Bar - Always visible on mobile */}
+        <div className="lg:hidden pb-3">
           <form onSubmit={handleSearch}>
             <div className="relative">
               <Input
                 type="text"
-                placeholder="Search books..."
+                placeholder="Search books, authors..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-4 pr-12 border-gray-300 focus:ring-brand-500 focus:border-brand-500"
+                className="pl-4 pr-12 h-12 text-base border-gray-300 focus:ring-brand-500 focus:border-brand-500 rounded-lg"
               />
               <Button
                 type="submit"
                 size="sm"
-                className="absolute right-1 top-1 h-8 w-8 p-0 bg-brand-500 hover:bg-brand-600"
+                className="absolute right-2 top-2 h-8 w-8 p-0 bg-brand-500 hover:bg-brand-600 rounded-md"
               >
                 <Search className="w-4 h-4" />
               </Button>
@@ -214,43 +224,45 @@ export function Navigation() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t bg-white py-4">
-            <nav className="flex flex-col space-y-2">
+          <div className="lg:hidden border-t bg-white py-2 shadow-lg">
+            <nav className="flex flex-col">
               <Link
                 to="/shop"
-                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
+                className="px-4 py-3 text-gray-700 hover:bg-gray-50 active:bg-gray-100 border-b border-gray-100 flex items-center"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
+                <BookOpen className="w-5 h-5 mr-3 text-brand-500" />
                 All Books
               </Link>
-              {categories.slice(0, 5).map((category) => (
+              {categories.slice(0, 6).map((category) => (
                 <Link
                   key={category.id}
                   to={`/shop?category=${category.id}`}
-                  className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded flex justify-between"
+                  className="px-4 py-3 text-gray-700 hover:bg-gray-50 active:bg-gray-100 border-b border-gray-100 flex justify-between items-center"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <span>{category.name}</span>
+                  <span className="font-medium">{category.name}</span>
                   <span className="text-xs text-gray-500 telugu-text">
                     {category.nameTelugu}
                   </span>
                 </Link>
               ))}
-              <hr className="my-2" />
-              <Link
-                to="/about"
-                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                About Us
-              </Link>
-              <Link
-                to="/contact"
-                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Contact
-              </Link>
+              <div className="border-t border-gray-200 mt-2 pt-2">
+                <Link
+                  to="/about"
+                  className="px-4 py-3 text-gray-700 hover:bg-gray-50 active:bg-gray-100 flex items-center"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  About Us
+                </Link>
+                <Link
+                  to="/contact"
+                  className="px-4 py-3 text-gray-700 hover:bg-gray-50 active:bg-gray-100 flex items-center"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Contact
+                </Link>
+              </div>
             </nav>
           </div>
         )}
