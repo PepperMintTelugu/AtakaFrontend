@@ -17,6 +17,9 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Admin from "./pages/Admin";
 import AdminTheme from "./pages/AdminTheme";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Checkout from "./pages/Checkout";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -43,35 +46,9 @@ const App = () => (
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/admin" element={<Admin />} />
                   <Route path="/admin/theme" element={<AdminTheme />} />
-
-                  {/* Placeholder routes for future implementation */}
-                  <Route
-                    path="/login"
-                    element={
-                      <PlaceholderPage
-                        title="Login"
-                        description="Google One-tap signin coming soon"
-                      />
-                    }
-                  />
-                  <Route
-                    path="/register"
-                    element={
-                      <PlaceholderPage
-                        title="Register"
-                        description="Account creation coming soon"
-                      />
-                    }
-                  />
-                  <Route
-                    path="/checkout"
-                    element={
-                      <PlaceholderPage
-                        title="Checkout"
-                        description="Razorpay integration coming soon"
-                      />
-                    }
-                  />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/checkout" element={<Checkout />} />
                   <Route
                     path="/orders"
                     element={
