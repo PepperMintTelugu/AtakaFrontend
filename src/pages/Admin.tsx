@@ -67,6 +67,7 @@ export default function Admin() {
       book.author.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory =
       !selectedCategory ||
+      selectedCategory === "all" ||
       book.category.toLowerCase() === selectedCategory.toLowerCase();
     return matchesSearch && matchesCategory;
   });
