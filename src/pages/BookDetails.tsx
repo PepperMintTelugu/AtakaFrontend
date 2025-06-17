@@ -26,7 +26,6 @@ import { Separator } from "@/components/ui/separator";
 import { BookCard } from "@/components/BookCard";
 import PincodeChecker from "@/components/PincodeChecker";
 import { useCart, useWishlist } from "@/contexts/AppContext";
-import { useCart, useWishlist } from "@/contexts/AppContext";
 import { getBookById, mockBooks } from "@/data/books";
 import { cn } from "@/lib/utils";
 
