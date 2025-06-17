@@ -99,10 +99,10 @@ export default function BookDetails() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           {/* Image Gallery */}
           <div className="lg:col-span-5">
-            <div className="sticky top-24">
+            <div className="lg:sticky lg:top-24">
               {/* Main Image */}
               <div className="relative mb-4">
                 <div className="aspect-[3/4] bg-white rounded-lg overflow-hidden border">
@@ -312,7 +312,7 @@ export default function BookDetails() {
                     <Button
                       size="lg"
                       onClick={handleAddToCart}
-                      className="flex-1"
+                      className="flex-1 h-12 touch-manipulation"
                     >
                       <ShoppingCart className="w-5 h-5 mr-2" />
                       Add to Cart
@@ -322,7 +322,7 @@ export default function BookDetails() {
                       size="lg"
                       onClick={handleToggleWishlist}
                       className={cn(
-                        "flex-1 sm:flex-none",
+                        "flex-1 sm:flex-none h-12 touch-manipulation",
                         inWishlist && "border-red-500 text-red-500",
                       )}
                     >
@@ -336,7 +336,11 @@ export default function BookDetails() {
                     </Button>
                   </div>
 
-                  <Button variant="outline" size="lg" className="w-full">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full h-12 touch-manipulation"
+                  >
                     <Package className="w-5 h-5 mr-2" />
                     Buy Now
                   </Button>
@@ -527,7 +531,7 @@ export default function BookDetails() {
                 </Link>
               </Button>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
               {relatedBooks.map((relatedBook) => (
                 <BookCard key={relatedBook.id} book={relatedBook} />
               ))}
