@@ -7,46 +7,8 @@ import { cn } from "@/lib/utils";
 
 export function MobileBottomNav() {
   const location = useLocation();
-  const { itemCount } = useCart();
-  const { wishlist } = useWishlist();
-
-  const navItems = [
-    {
-      id: "home",
-      label: "Home",
-      icon: Home,
-      path: "/",
-      badge: null,
-    },
-    {
-      id: "shop",
-      label: "Shop",
-      icon: Search,
-      path: "/shop",
-      badge: null,
-    },
-    {
-      id: "wishlist",
-      label: "Wishlist",
-      icon: Heart,
-      path: "/wishlist",
-      badge: wishlist.length > 0 ? wishlist.length : null,
-    },
-    {
-      id: "cart",
-      label: "Cart",
-      icon: ShoppingBag,
-      path: "/cart",
-      badge: itemCount > 0 ? itemCount : null,
-    },
-    {
-      id: "account",
-      label: "Account",
-      icon: User,
-      path: "/login",
-      badge: null,
-    },
-  ];
+  const { itemCount, toggleCart } = useCart();
+  const { wishlist, toggleWishlist } = useWishlist();
 
   const isActive = (path: string) => {
     if (path === "/") {
@@ -55,49 +17,137 @@ export function MobileBottomNav() {
     return location.pathname.startsWith(path);
   };
 
+  const handleNavClick = (
+    e: React.MouseEvent,
+    action: "link" | "cart" | "wishlist",
+    path?: string,
+  ) => {
+    if (action === "cart") {
+      e.preventDefault();
+      toggleCart();
+    } else if (action === "wishlist") {
+      e.preventDefault();
+      toggleWishlist();
+    }
+    // For 'link' action, let the default Link behavior handle navigation
+  };
+
   return (
     <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg">
       <nav className="grid grid-cols-5 h-16">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const active = isActive(item.path);
+        {/* Home */}
+        <Link
+          to="/"
+          className={cn(
+            "flex flex-col items-center justify-center space-y-1 transition-colors touch-manipulation relative",
+            isActive("/")
+              ? "text-brand-600 bg-brand-50"
+              : "text-gray-600 hover:text-gray-900 active:bg-gray-100",
+          )}
+        >
+          <Home className={cn("w-5 h-5", isActive("/") && "text-brand-600")} />
+          <span
+            className={cn(
+              "text-xs font-medium",
+              isActive("/") ? "text-brand-600" : "text-gray-600",
+            )}
+          >
+            Home
+          </span>
+          {isActive("/") && (
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-6 h-0.5 bg-brand-600 rounded-full"></div>
+          )}
+        </Link>
 
-          return (
-            <Link
-              key={item.id}
-              to={item.path}
-              className={cn(
-                "flex flex-col items-center justify-center space-y-1 transition-colors touch-manipulation relative",
-                active
-                  ? "text-brand-600 bg-brand-50"
-                  : "text-gray-600 hover:text-gray-900 active:bg-gray-100",
-              )}
-            >
-              <div className="relative">
-                <Icon className={cn("w-5 h-5", active && "text-brand-600")} />
-                {item.badge && (
-                  <Badge
-                    variant="destructive"
-                    className="absolute -top-2 -right-2 h-4 w-4 rounded-full p-0 flex items-center justify-center text-xs"
-                  >
-                    {item.badge > 99 ? "99+" : item.badge}
-                  </Badge>
-                )}
-              </div>
-              <span
-                className={cn(
-                  "text-xs font-medium",
-                  active ? "text-brand-600" : "text-gray-600",
-                )}
+        {/* Shop */}
+        <Link
+          to="/shop"
+          className={cn(
+            "flex flex-col items-center justify-center space-y-1 transition-colors touch-manipulation relative",
+            isActive("/shop")
+              ? "text-brand-600 bg-brand-50"
+              : "text-gray-600 hover:text-gray-900 active:bg-gray-100",
+          )}
+        >
+          <Search
+            className={cn("w-5 h-5", isActive("/shop") && "text-brand-600")}
+          />
+          <span
+            className={cn(
+              "text-xs font-medium",
+              isActive("/shop") ? "text-brand-600" : "text-gray-600",
+            )}
+          >
+            Shop
+          </span>
+          {isActive("/shop") && (
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-6 h-0.5 bg-brand-600 rounded-full"></div>
+          )}
+        </Link>
+
+        {/* Wishlist */}
+        <button
+          onClick={(e) => handleNavClick(e, "wishlist")}
+          className="flex flex-col items-center justify-center space-y-1 transition-colors touch-manipulation relative text-gray-600 hover:text-gray-900 active:bg-gray-100"
+        >
+          <div className="relative">
+            <Heart className="w-5 h-5" />
+            {wishlist.length > 0 && (
+              <Badge
+                variant="destructive"
+                className="absolute -top-2 -right-2 h-4 w-4 rounded-full p-0 flex items-center justify-center text-xs"
               >
-                {item.label}
-              </span>
-              {active && (
-                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-6 h-0.5 bg-brand-600 rounded-full"></div>
-              )}
-            </Link>
-          );
-        })}
+                {wishlist.length > 99 ? "99+" : wishlist.length}
+              </Badge>
+            )}
+          </div>
+          <span className="text-xs font-medium text-gray-600">Wishlist</span>
+        </button>
+
+        {/* Cart */}
+        <button
+          onClick={(e) => handleNavClick(e, "cart")}
+          className="flex flex-col items-center justify-center space-y-1 transition-colors touch-manipulation relative text-gray-600 hover:text-gray-900 active:bg-gray-100"
+        >
+          <div className="relative">
+            <ShoppingBag className="w-5 h-5" />
+            {itemCount > 0 && (
+              <Badge
+                variant="destructive"
+                className="absolute -top-2 -right-2 h-4 w-4 rounded-full p-0 flex items-center justify-center text-xs"
+              >
+                {itemCount > 99 ? "99+" : itemCount}
+              </Badge>
+            )}
+          </div>
+          <span className="text-xs font-medium text-gray-600">Cart</span>
+        </button>
+
+        {/* Account */}
+        <Link
+          to="/login"
+          className={cn(
+            "flex flex-col items-center justify-center space-y-1 transition-colors touch-manipulation relative",
+            isActive("/login")
+              ? "text-brand-600 bg-brand-50"
+              : "text-gray-600 hover:text-gray-900 active:bg-gray-100",
+          )}
+        >
+          <User
+            className={cn("w-5 h-5", isActive("/login") && "text-brand-600")}
+          />
+          <span
+            className={cn(
+              "text-xs font-medium",
+              isActive("/login") ? "text-brand-600" : "text-gray-600",
+            )}
+          >
+            Account
+          </span>
+          {isActive("/login") && (
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-6 h-0.5 bg-brand-600 rounded-full"></div>
+          )}
+        </Link>
       </nav>
     </div>
   );
