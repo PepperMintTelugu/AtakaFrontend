@@ -14,6 +14,18 @@ import {
   Upload,
   Save,
   X,
+  CreditCard,
+  Truck,
+  Settings,
+  Key,
+  CheckCircle,
+  XCircle,
+  ExternalLink,
+  Copy,
+  RefreshCw,
+  AlertCircle,
+  Zap,
+  Shield,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -103,11 +115,13 @@ export default function Admin() {
 
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="books">Books</TabsTrigger>
             <TabsTrigger value="orders">Orders</TabsTrigger>
             <TabsTrigger value="customers">Customers</TabsTrigger>
+            <TabsTrigger value="payments">Payments</TabsTrigger>
+            <TabsTrigger value="shipping">Shipping</TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
@@ -384,6 +398,16 @@ export default function Admin() {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Payments (Razorpay) Tab */}
+          <TabsContent value="payments">
+            <PaymentIntegrationTab />
+          </TabsContent>
+
+          {/* Shipping (ShipRocket) Tab */}
+          <TabsContent value="shipping">
+            <ShippingIntegrationTab />
           </TabsContent>
         </Tabs>
       </div>
@@ -758,5 +782,555 @@ function AddBookDialog({
         </form>
       </DialogContent>
     </Dialog>
+  );
+}
+
+// Payment Integration Tab Component
+function PaymentIntegrationTab() {
+  const [razorpayConfig, setRazorpayConfig] = useState({
+    keyId: import.meta.env.VITE_RAZORPAY_KEY_ID || "",
+    keySecret: "",
+    webhookSecret: "",
+    isLive: false,
+  });
+  const [isConnected, setIsConnected] = useState(false);
+  const [transactions, setTransactions] = useState([
+    {
+      id: "pay_123456789",
+      orderId: "order_987654321",
+      amount: 599,
+      status: "captured",
+      date: "2024-01-15",
+      customer: "John Doe",
+    },
+    {
+      id: "pay_123456788",
+      orderId: "order_987654320",
+      amount: 899,
+      status: "failed",
+      date: "2024-01-14",
+      customer: "Jane Smith",
+    },
+    {
+      id: "pay_123456787",
+      orderId: "order_987654319",
+      amount: 1299,
+      status: "captured",
+      date: "2024-01-13",
+      customer: "Mike Johnson",
+    },
+  ]);
+
+  const handleConfigSave = () => {
+    // Save Razorpay configuration
+    console.log("Saving Razorpay config:", razorpayConfig);
+    setIsConnected(true);
+  };
+
+  const testConnection = () => {
+    // Test Razorpay connection
+    console.log("Testing Razorpay connection...");
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Razorpay Configuration */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <CreditCard className="w-5 h-5 mr-2" />
+            Razorpay Configuration
+          </CardTitle>
+          <p className="text-gray-600">
+            Configure your Razorpay payment gateway integration
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Connection Status */}
+          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            <div className="flex items-center space-x-3">
+              {isConnected ? (
+                <CheckCircle className="w-5 h-5 text-green-500" />
+              ) : (
+                <XCircle className="w-5 h-5 text-red-500" />
+              )}
+              <div>
+                <h3 className="font-medium">
+                  {isConnected ? "Connected" : "Not Connected"}
+                </h3>
+                <p className="text-sm text-gray-600">
+                  {isConnected
+                    ? "Razorpay is configured and ready to accept payments"
+                    : "Configure Razorpay to start accepting payments"}
+                </p>
+              </div>
+            </div>
+            {isConnected && (
+              <Badge
+                variant="secondary"
+                className="bg-green-100 text-green-700"
+              >
+                {razorpayConfig.isLive ? "Live Mode" : "Test Mode"}
+              </Badge>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="keyId">Key ID</Label>
+              <div className="relative">
+                <Input
+                  id="keyId"
+                  value={razorpayConfig.keyId}
+                  onChange={(e) =>
+                    setRazorpayConfig((prev) => ({
+                      ...prev,
+                      keyId: e.target.value,
+                    }))
+                  }
+                  placeholder="rzp_test_..."
+                />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-2 top-1 h-8 w-8 p-0"
+                  onClick={() =>
+                    navigator.clipboard.writeText(razorpayConfig.keyId)
+                  }
+                >
+                  <Copy className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="keySecret">Key Secret</Label>
+              <Input
+                id="keySecret"
+                type="password"
+                value={razorpayConfig.keySecret}
+                onChange={(e) =>
+                  setRazorpayConfig((prev) => ({
+                    ...prev,
+                    keySecret: e.target.value,
+                  }))
+                }
+                placeholder="Enter your key secret"
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="webhookSecret">Webhook Secret</Label>
+            <Input
+              id="webhookSecret"
+              type="password"
+              value={razorpayConfig.webhookSecret}
+              onChange={(e) =>
+                setRazorpayConfig((prev) => ({
+                  ...prev,
+                  webhookSecret: e.target.value,
+                }))
+              }
+              placeholder="Enter webhook secret"
+            />
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="isLive"
+              checked={razorpayConfig.isLive}
+              onChange={(e) =>
+                setRazorpayConfig((prev) => ({
+                  ...prev,
+                  isLive: e.target.checked,
+                }))
+              }
+              className="rounded"
+            />
+            <Label htmlFor="isLive">Enable Live Mode</Label>
+          </div>
+
+          <div className="flex space-x-3">
+            <Button onClick={testConnection} variant="outline">
+              <Zap className="w-4 h-4 mr-2" />
+              Test Connection
+            </Button>
+            <Button onClick={handleConfigSave}>
+              <Save className="w-4 h-4 mr-2" />
+              Save Configuration
+            </Button>
+            <Button variant="outline" asChild>
+              <a
+                href="https://dashboard.razorpay.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <ExternalLink className="w-4 h-4 mr-2" />
+                Razorpay Dashboard
+              </a>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Recent Transactions */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Transactions</CardTitle>
+          <p className="text-gray-600">
+            Latest payment transactions from Razorpay
+          </p>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Transaction ID</TableHead>
+                  <TableHead>Order ID</TableHead>
+                  <TableHead>Customer</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {transactions.map((transaction) => (
+                  <TableRow key={transaction.id}>
+                    <TableCell className="font-mono text-sm">
+                      {transaction.id}
+                    </TableCell>
+                    <TableCell className="font-mono text-sm">
+                      {transaction.orderId}
+                    </TableCell>
+                    <TableCell>{transaction.customer}</TableCell>
+                    <TableCell>₹{transaction.amount}</TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          transaction.status === "captured"
+                            ? "default"
+                            : transaction.status === "failed"
+                              ? "destructive"
+                              : "secondary"
+                        }
+                      >
+                        {transaction.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{transaction.date}</TableCell>
+                    <TableCell>
+                      <Button variant="ghost" size="sm">
+                        <Eye className="w-4 h-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Payment Settings */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Payment Settings</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-medium mb-2">Accepted Payment Methods</h3>
+              <div className="space-y-2">
+                {[
+                  "Credit/Debit Cards",
+                  "UPI",
+                  "Net Banking",
+                  "Wallets",
+                  "EMI",
+                ].map((method) => (
+                  <div key={method} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id={method}
+                      defaultChecked
+                      className="rounded"
+                    />
+                    <Label htmlFor={method}>{method}</Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="font-medium mb-2">Currency Settings</h3>
+              <Select defaultValue="INR">
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="INR">Indian Rupee (₹)</SelectItem>
+                  <SelectItem value="USD">US Dollar ($)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+// Shipping Integration Tab Component
+function ShippingIntegrationTab() {
+  const [shiprocketConfig, setShiprocketConfig] = useState({
+    email: "",
+    password: "",
+    token: "",
+    companyId: "",
+    isConnected: false,
+  });
+  const [shippingRates, setShippingRates] = useState([
+    { zone: "Local", rate: 40, freeAbove: 500 },
+    { zone: "Metro", rate: 60, freeAbove: 500 },
+    { zone: "Rest of India", rate: 80, freeAbove: 500 },
+    { zone: "Northeast", rate: 100, freeAbove: 500 },
+  ]);
+
+  const handleShiprocketLogin = () => {
+    // Authenticate with ShipRocket
+    console.log("Connecting to ShipRocket...");
+    setShiprocketConfig((prev) => ({ ...prev, isConnected: true }));
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* ShipRocket Configuration */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <Truck className="w-5 h-5 mr-2" />
+            ShipRocket Configuration
+          </CardTitle>
+          <p className="text-gray-600">
+            Configure your ShipRocket shipping integration
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Connection Status */}
+          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            <div className="flex items-center space-x-3">
+              {shiprocketConfig.isConnected ? (
+                <CheckCircle className="w-5 h-5 text-green-500" />
+              ) : (
+                <XCircle className="w-5 h-5 text-red-500" />
+              )}
+              <div>
+                <h3 className="font-medium">
+                  {shiprocketConfig.isConnected ? "Connected" : "Not Connected"}
+                </h3>
+                <p className="text-sm text-gray-600">
+                  {shiprocketConfig.isConnected
+                    ? "ShipRocket is configured and ready for shipping"
+                    : "Configure ShipRocket to start shipping orders"}
+                </p>
+              </div>
+            </div>
+            {shiprocketConfig.isConnected && (
+              <Badge
+                variant="secondary"
+                className="bg-green-100 text-green-700"
+              >
+                Active
+              </Badge>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="shipEmail">ShipRocket Email</Label>
+              <Input
+                id="shipEmail"
+                type="email"
+                value={shiprocketConfig.email}
+                onChange={(e) =>
+                  setShiprocketConfig((prev) => ({
+                    ...prev,
+                    email: e.target.value,
+                  }))
+                }
+                placeholder="your-email@example.com"
+              />
+            </div>
+            <div>
+              <Label htmlFor="shipPassword">Password</Label>
+              <Input
+                id="shipPassword"
+                type="password"
+                value={shiprocketConfig.password}
+                onChange={(e) =>
+                  setShiprocketConfig((prev) => ({
+                    ...prev,
+                    password: e.target.value,
+                  }))
+                }
+                placeholder="Enter your password"
+              />
+            </div>
+          </div>
+
+          <div className="flex space-x-3">
+            <Button onClick={handleShiprocketLogin}>
+              <Key className="w-4 h-4 mr-2" />
+              Connect to ShipRocket
+            </Button>
+            <Button variant="outline" asChild>
+              <a
+                href="https://app.shiprocket.in"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <ExternalLink className="w-4 h-4 mr-2" />
+                ShipRocket Panel
+              </a>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Shipping Rates */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Shipping Rates</CardTitle>
+          <p className="text-gray-600">
+            Configure shipping rates for different zones
+          </p>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Zone</TableHead>
+                  <TableHead>Base Rate (₹)</TableHead>
+                  <TableHead>Free Shipping Above (₹)</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {shippingRates.map((rate, index) => (
+                  <TableRow key={rate.zone}>
+                    <TableCell className="font-medium">{rate.zone}</TableCell>
+                    <TableCell>₹{rate.rate}</TableCell>
+                    <TableCell>₹{rate.freeAbove}</TableCell>
+                    <TableCell>
+                      <Button variant="ghost" size="sm">
+                        <Edit3 className="w-4 h-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Pickup Address */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Pickup Address</CardTitle>
+          <p className="text-gray-600">
+            Configure your warehouse/pickup address
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="pickupName">Company Name</Label>
+              <Input
+                id="pickupName"
+                placeholder="Your Company Name"
+                defaultValue="Telugu Books Store"
+              />
+            </div>
+            <div>
+              <Label htmlFor="pickupPhone">Phone</Label>
+              <Input
+                id="pickupPhone"
+                placeholder="Phone number"
+                defaultValue="+91 9876543210"
+              />
+            </div>
+          </div>
+          <div>
+            <Label htmlFor="pickupAddress">Address</Label>
+            <Input
+              id="pickupAddress"
+              placeholder="Complete address"
+              defaultValue="123 Main Street, City, State - 500001"
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <Label htmlFor="pickupCity">City</Label>
+              <Input id="pickupCity" defaultValue="Hyderabad" />
+            </div>
+            <div>
+              <Label htmlFor="pickupState">State</Label>
+              <Input id="pickupState" defaultValue="Telangana" />
+            </div>
+            <div>
+              <Label htmlFor="pickupPincode">Pincode</Label>
+              <Input id="pickupPincode" defaultValue="500001" />
+            </div>
+          </div>
+          <Button>
+            <Save className="w-4 h-4 mr-2" />
+            Save Pickup Address
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* Courier Partners */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Courier Partners</CardTitle>
+          <p className="text-gray-600">Available shipping partners</p>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { name: "BlueDart", status: "active", logo: "BD" },
+              { name: "Delhivery", status: "active", logo: "DL" },
+              { name: "Ecom Express", status: "active", logo: "EE" },
+              { name: "DTDC", status: "inactive", logo: "DT" },
+              { name: "FedEx", status: "active", logo: "FX" },
+              { name: "Professional", status: "active", logo: "PR" },
+            ].map((partner) => (
+              <div
+                key={partner.name}
+                className="flex items-center justify-between p-3 border rounded-lg"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-sm font-bold text-blue-600">
+                    {partner.logo}
+                  </div>
+                  <span className="font-medium">{partner.name}</span>
+                </div>
+                <Badge
+                  variant={
+                    partner.status === "active" ? "default" : "secondary"
+                  }
+                >
+                  {partner.status}
+                </Badge>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
