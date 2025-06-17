@@ -18,6 +18,7 @@ import userRoutes from "./routes/users.js";
 import adminRoutes from "./routes/admin.js";
 import settingsRoutes from "./routes/settings.js";
 import importRoutes from "./routes/import.js";
+import deliveryRoutes from "./routes/delivery.js";
 import settingsRoutes from "./routes/settings.js";
 
 // Import middleware
@@ -77,6 +78,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/settings", settingsRoutes);
 app.use("/api/import", importRoutes);
+app.use("/api/delivery", deliveryRoutes);
 app.use("/api/settings", settingsRoutes);
 
 // Serve uploaded files
